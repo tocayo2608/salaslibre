@@ -6,12 +6,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.recursomechon.salaslibre.utils.CredentialsReader;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class ExtractInfo {
     private static WebDriver driver;
@@ -25,7 +27,7 @@ public class ExtractInfo {
         this.password = credentials.getProperty("password");
     }
 
-    public void LoginSiga(){
+    public boolean LoginSiga(){
         driver.get("https://siga.usm.cl/pag/home.jsp");
 
         try{
@@ -37,11 +39,40 @@ public class ExtractInfo {
 
             WebElement loginbutton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@alt='Ingresar']")));
             loginbutton.click();
+            System.out.println("Login exitoso.");
+            return true;
         }
         catch(Exception e){
             System.out.println("Error durante el Login: " + e.getMessage());
+            return false;
         }
+    }
 
+    public void navigateSiga() {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("dos")) ;
+            WebElement element = new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                    ExpectedConditions.elementToBeClickable(By.cssSelector("a[title='Consulte el horario de las asignaturas programadas en el semestre']")));
+            element.click();
+            System.out.println(driver.getPageSource());
+        } catch (Exception e) {
+            System.out.println("Error durante el navigation: " + e.getMessage());
+        }
+    }
+    public void selectOptions(){
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("frame5")) ;
+            WebElement options = new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                    ExpectedConditions.visibilityOfElementLocated(By.name("op")));
+            options.click();
+            Select select = new Select(options);
+            System.out.println("Depuraooo");
 
+            select.selectByVisibleText("Todas las asignaturas");
+            driver.switchTo().defaultContent();
+        }
+        catch (Exception e) {
+            System.out.println("Error durante el navigation: " + e.getMessage());
+        }
     }
 }
