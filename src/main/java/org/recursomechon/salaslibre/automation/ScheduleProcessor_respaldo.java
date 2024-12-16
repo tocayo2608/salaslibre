@@ -8,10 +8,10 @@
     import java.time.Duration;
     import java.util.List;
 
-    public class ScheduleProcessor {
+    public class ScheduleProcessor_respaldo {
         private final WebDriver driver;
 
-        public ScheduleProcessor(WebDriver driver) {
+        public ScheduleProcessor_respaldo(WebDriver driver) {
 
             this.driver = driver;
         }
