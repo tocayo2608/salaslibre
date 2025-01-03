@@ -66,7 +66,6 @@ public class ExtractInfo {
                     ExpectedConditions.visibilityOfElementLocated(By.name("op")));
             options.click();
             Select select = new Select(options);
-            System.out.println("Depuraooo");
 
             select.selectByVisibleText("Todas las asignaturas");
             driver.switchTo().defaultContent();
