@@ -29,4 +29,10 @@ public class FrameGestor {
             System.out.println("Error al obtener los frames: " + e.getMessage());
         }
     }
+    public void switchTo(String frameName) {
+        driver.switchTo().frame(frameName);
+    }
+    public void printSourceCode() {
+        System.out.println(driver.getPageSource());
+    }
 }
