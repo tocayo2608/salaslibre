@@ -7,16 +7,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.recursomechon.salaslibre.utils.FrameGestor;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ScheduleProcessor {
     private final WebDriver driver;
-
+    Map<String, List<String>> information;
     public ScheduleProcessor(WebDriver driver) {
 
         this.driver = driver;
+        this.information = new HashMap<>();
     }
 
     public void runProcessor(){
@@ -76,72 +75,63 @@ public class ScheduleProcessor {
     }
     private void LocateOrange() {
         FrameGestor frameGestor = new FrameGestor(driver);
+        List<String> local_list = new ArrayList<>();
+        List<String> block_list = new ArrayList<>();
 
-        // Localizar la tabla principal
+        ///////
+
+        //////
+
         WebElement tablaPrincipal = driver.findElement(By.xpath("//*[@id='msg']/center/table[2]"));
-
-        // Listas para días y bloques horarios
-        List<String> dias = List.of("pass", "pass1", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
-        List<String> bloques = List.of("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"); // Personaliza según los bloques reales
-
-        // Contadores
-        int contFila = 0;
-
-        // Obtener todas las filas de la tabla principal
         List<WebElement> filas = tablaPrincipal.findElements(By.tagName("tr"));
 
-        // Iterar por las filas de la tabla principal
         for (WebElement fila : filas) {
-            contFila++; // Incrementar el contador de filas
-
-            // Obtener todas las celdas (columnas) de la fila actual
             List<WebElement> celdas = fila.findElements(By.tagName("td"));
-            int contColumna = 0; // Reiniciar contador de columnas por fila
-
             for (WebElement celda : celdas) {
-                contColumna++; // Incrementar el contador de columnas
-
-                // Verificar si la celda tiene una tabla interna con clase "letra7"
                 WebElement tablaInterna;
                 try {
                     tablaInterna = celda.findElement(By.className("letra7"));
                 } catch (Exception e) {
-                    continue; // Si no tiene tabla interna, pasar a la siguiente celda
+                    continue;
                 }
-
-                // Obtener filas internas de la tabla dentro de la celda
                 List<WebElement> filasInternas = tablaInterna.findElements(By.tagName("tr"));
                 for (WebElement filaInterna : filasInternas) {
-                    // Obtener las celdas internas (td) de la fila interna
                     List<WebElement> tdsInternos = filaInterna.findElements(By.tagName("td"));
                     for (WebElement tdInterno : tdsInternos) {
-                        // Verificar el color de fondo de la celda interna
                         String colorFondo = tdInterno.getAttribute("bgcolor");
                         if ("#FF9900".equalsIgnoreCase(colorFondo)) {
                             try {
-                                // Extraer el texto de la celda interna
+                                WebElement trExterno = tdInterno.findElement(By.xpath("./ancestor::tr"));
+                                WebElement primerTd = trExterno.findElement(By.xpath("./td[1]"));
+                                String textoRelacionado = primerTd.getText().trim();
                                 WebElement font = tdInterno.findElement(By.tagName("font"));
-                                String texto = font.getText().trim();
+                                String textoFF9900 = font.getText().trim();
+                                local_list.add(textoFF9900);
+                                block_list.add(textoRelacionado);
 
-                                // Determinar el día (basado en el contador de columnas)
-                                String dia = contColumna <= dias.size() ? dias.get(contColumna) : "Desconocido";
-
-                                // Determinar el bloque horario (basado en el contador de filas)
-                                String bloque = contFila <= bloques.size() ? bloques.get(contFila) : "Bloque desconocido";
-
-                                // Imprimir información recolectada
-                                System.out.println("Celda encontrada: " + texto);
-                                System.out.println("  Día: " + dia);
-                                System.out.println("  Bloque horario: " + bloque);
-                                System.out.println("--------------------------------");
                             } catch (Exception e) {
-                                continue; // Si ocurre un error, pasar a la siguiente celda
+                                continue;
                             }
                         }
+
                     }
                 }
+
             }
         }
     }
+    private String getBlock(String number1, String number2){
+        Integer local_number = Integer.valueOf(number1);
+        if (local_number % 2 == 0){
+            return String.format("{}-{}",number2, number1);
+        }
+        else{
+            return String.format("{} -{}", number1, number2);
+        }
+    }
 
+    private void getInformationAsignatura(){
+        WebElement tablaPrincipal = driver.findElement(By.xpath("/center/table[1]"));
+
+    }
 }
