@@ -109,19 +109,21 @@ public class ScheduleProcessor {
         int CreditosText = getNumber(auxCreditos);
 
         /////////
-
+/*
         System.out.println(CampusText);
         System.out.println(ProfesorText);
         System.out.println("Paralelo: " + ParaleloNumber + "");
         System.out.println(JornadaText);
         System.out.println(CreditosText);
         System.out.println(infoLocalText);
-
+*/
         //////
-
-        Course course = new Course(CampusText, infoLocalText, ProfesorText, JornadaText, ParaleloNumber, CreditosText);
+        Map<String, String> horario = new HashMap<>();
+        Course course = new Course(CampusText, infoLocalText, ProfesorText, JornadaText, ParaleloNumber, CreditosText, horario);
         WebElement tablaPrincipal = driver.findElement(By.xpath("//*[@id='msg']/center/table[2]"));
+
         List<WebElement> filas = tablaPrincipal.findElements(By.tagName("tr"));
+        List<String> listAux = new ArrayList<>();
         for (WebElement fila : filas) {
             List<WebElement> celdas = fila.findElements(By.tagName("td"));
             for (WebElement celda : celdas) {
@@ -163,9 +165,11 @@ public class ScheduleProcessor {
                                 String bloque = getBlock(textoRelacionado);
                                 String sala = getSala(textoFF9900);
 
-
+/*
                                 System.out.println("día: " + getDay(extractTdNumber(xpathFont)));
                                 System.out.println("bloque: " + bloque + " en la sala: " + sala);
+                                */
+                                course.addHorario(getDay(extractTdNumber(xpathFont)), sala);
 
 
                             } catch (Exception e) {
@@ -174,10 +178,12 @@ public class ScheduleProcessor {
                         }
 
                     }
+
                 }
 
             }
         }
+        course.printInfo();
     }
 
 }
