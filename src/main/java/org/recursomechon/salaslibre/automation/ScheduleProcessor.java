@@ -1,12 +1,13 @@
 package org.recursomechon.salaslibre.automation;
 
-import net.bytebuddy.asm.Advice;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.recursomechon.salaslibre.utils.Course;
+import org.recursomechon.salaslibre.utils.CourseDAO;
 import org.recursomechon.salaslibre.utils.FrameGestor;
+
 import java.time.Duration;
 import java.util.*;
 
@@ -69,14 +70,14 @@ public class ScheduleProcessor {
             LocateOrange();
 
 
-            Scanner scanner = new Scanner(System.in);
+//            Scanner scanner = new Scanner(System.in);
 
             System.out.println(".................");
-            /*
-            scanner.nextLine();
+
+//            scanner.nextLine();
 
 
-             */
+
 
         } catch (Exception e) {
             System.out.println("Error collecting information: " + e.getMessage());
@@ -109,7 +110,7 @@ public class ScheduleProcessor {
         int CreditosText = getNumber(auxCreditos);
 
         /////////
-/*
+/*Test
         System.out.println(CampusText);
         System.out.println(ProfesorText);
         System.out.println("Paralelo: " + ParaleloNumber + "");
@@ -118,7 +119,7 @@ public class ScheduleProcessor {
         System.out.println(infoLocalText);
 */
         //////
-        Map<String, String> horario = new HashMap<>();
+        Map<String, Map<String, String>> horario = new HashMap<>();
         Course course = new Course(CampusText, infoLocalText, ProfesorText, JornadaText, ParaleloNumber, CreditosText, horario);
         WebElement tablaPrincipal = driver.findElement(By.xpath("//*[@id='msg']/center/table[2]"));
 
@@ -165,11 +166,13 @@ public class ScheduleProcessor {
                                 String bloque = getBlock(textoRelacionado);
                                 String sala = getSala(textoFF9900);
 
-/*
+/*                                      TEST
                                 System.out.println("día: " + getDay(extractTdNumber(xpathFont)));
                                 System.out.println("bloque: " + bloque + " en la sala: " + sala);
-                                */
-                                course.addHorario(getDay(extractTdNumber(xpathFont)), sala);
+*/
+                                Map<String, String> LocalInfo = new HashMap<>();
+                                LocalInfo.put(bloque, sala);
+                                course.addHorario(getDay(extractTdNumber(xpathFont)), LocalInfo);
 
 
                             } catch (Exception e) {
@@ -183,7 +186,9 @@ public class ScheduleProcessor {
 
             }
         }
-        course.printInfo();
+        CourseDAO courseDAO = new CourseDAO();
+        courseDAO.createTablesIfNotExist();
+        courseDAO.saveCourse(course);
     }
 
 }
