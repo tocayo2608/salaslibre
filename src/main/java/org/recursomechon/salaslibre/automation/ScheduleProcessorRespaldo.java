@@ -51,13 +51,7 @@ public class ScheduleProcessorRespaldo {
     }
 
     static void TabPerform(Actions action, WebDriver driver) throws InterruptedException {
-        action.sendKeys(Keys.TAB).perform();
-        Thread.sleep(200);
-        action.sendKeys(Keys.ENTER).perform();
-        Thread.sleep(1000);
-        driver.switchTo().defaultContent();
-
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.numberOfWindowsToBe(2));
+        ScheduleProcessor.TabMethod(action, driver);
     }
 
     private void collectData(){
