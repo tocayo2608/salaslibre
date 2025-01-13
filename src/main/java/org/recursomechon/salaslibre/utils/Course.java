@@ -39,7 +39,6 @@ public class Course {
         this.horario = horario != null ? new HashMap<>(horario) : new HashMap<>();
     }
 
-    // Método para agregar un horario, utiliza computeIfAbsent para simplificar lógica
     public void addHorario(String dia, Map<String, String> info) {
         if (dia == null || dia.isEmpty()) {
             throw new IllegalArgumentException("El día no puede ser nulo o vacío.");
@@ -51,7 +50,6 @@ public class Course {
         horario.computeIfAbsent(dia, k -> new HashMap<>()).putAll(info);
     }
 
-    // Método para imprimir información completa del curso
     public void printInfo() {
         System.out.println("Información del Curso:");
         System.out.println("Campus: " + campus);
@@ -64,7 +62,6 @@ public class Course {
         printHorario();
     }
 
-    // Método privado para imprimir horarios
     private void printHorario() {
         for (Map.Entry<String, Map<String, String>> dia : horario.entrySet()) {
             System.out.println("  Día: " + dia.getKey());
