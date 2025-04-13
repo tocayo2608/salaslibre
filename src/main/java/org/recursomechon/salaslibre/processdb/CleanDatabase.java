@@ -27,7 +27,7 @@ private static void cleanDatabase(Connection connection) throws Exception {
         }
     }
 private static void trimDatabase() throws Exception {
-    String url = "jdbc:sqlite:Courses_Final.db";
+    String url = "jdbc:sqlite:courses.db";
 
     // Consulta SQL para eliminar espacios en blanco finales
     String query = "UPDATE Schedule " +

@@ -5,7 +5,7 @@ import java.sql.*;
 public class FilterRooms {
     public static void main(String[] args) {
         // Cambiar estos valores según tu configuración
-        String url = "jdbc:sqlite:coursesFilteredBySala.db"; // Cambiar el path a tu archivo .db
+        String url = "jdbc:sqlite:courses.db";
         String querySelect = "SELECT id, room FROM Schedule";
         String queryUpdate = "UPDATE Schedule SET room = ? WHERE id = ?";
 
