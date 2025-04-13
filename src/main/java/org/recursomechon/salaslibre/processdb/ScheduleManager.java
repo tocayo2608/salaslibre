@@ -11,7 +11,7 @@ public class ScheduleManager {
     }
 
     public static void getAvailableRooms() {
-        String url = "jdbc:sqlite:Courses_Final.db";
+        String url = "jdbc:sqlite:courses.db";
 
         //////////////////
         Scanner scanner = new Scanner(System.in);
